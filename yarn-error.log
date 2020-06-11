@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/victor/.nvm/versions/node/v12.14.1/bin/node /usr/local/bin/yarn build
+  /Users/victor/.nvm/versions/node/v12.14.1/bin/node /usr/local/bin/yarn bui
 
 PATH: 
   /Users/victor/.nvm/versions/node/v12.14.1/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools:/Users/victor/.zinit/polaris/bin:/Users/victor/.nvm/versions/node/v12.14.1/bin
@@ -20,8 +20,10 @@ npm manifest:
     "description": "",
     "main": "index.js",
     "scripts": {
-      "dev": "nodemon src/server.js",
-      "dev:debug": "nodemon --inspect src/server.js"
+      "dev": "nodemon -r dotenv/config  src/server.js",
+      "build": "sucrase ./src -d ./dist --transforms imports",
+      "start": "node dist/server.js",
+      "dev:debug": "nodemon --inspect -r dotenv/config src/server.js"
     },
     "author": "",
     "license": "ISC",
@@ -31,7 +33,8 @@ npm manifest:
       "eslint": "^7.2.0",
       "express": "^4.17.1",
       "firebase": "^7.15.0",
-      "node-cache": "^5.1.1"
+      "node-cache": "^5.1.1",
+      "nodemon": "^2.0.2"
     },
     "devDependencies": {
       "eslint": "^6.8.0",
@@ -39,9 +42,11 @@ npm manifest:
       "eslint-config-prettier": "^6.10.0",
       "eslint-plugin-import": "^2.20.0",
       "eslint-plugin-prettier": "^3.1.2",
-      "nodemon": "^2.0.2",
       "prettier": "^1.19.1",
       "sucrase": "^3.12.1"
+    },
+    "engines": {
+      "node": "12.14.1"
     }
   }
 
@@ -2445,7 +2450,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
 
 Trace: 
-  Error: Command "build" not found.
+  Error: Command "bui" not found.
       at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
       at /usr/local/lib/node_modules/yarn/lib/cli.js:87307:17
       at Generator.next (<anonymous>)

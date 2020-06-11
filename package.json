@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r dotenv/config  src/server.js",
-    "start": "node -r src/server.js",
+    "build": "sucrase ./src -d ./dist --transforms imports",
+    "start": "node dist/server.js",
     "dev:debug": "nodemon --inspect -r dotenv/config src/server.js"
   },
   "author": "",
