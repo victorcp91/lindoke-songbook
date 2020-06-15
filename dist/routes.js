@@ -6,4 +6,8 @@ const routes = new (0, _express.Router)();
 
 routes.get('/content', _cache.getCache, _SongbookController2.default.show, _cache.setCache);
 
+routes.put('/lyrics/:id', _SongbookController2.default.update);
+
+routes.put('/songs/:id', _SongbookController2.default.store);
+
 exports. default = routes;
