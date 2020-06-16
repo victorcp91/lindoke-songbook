@@ -71,6 +71,7 @@ class SongbookController {
         const newSong = {
           title: newSongTitle,
           id: videoId,
+          lyrics,
         };
         updatedSongs = [newSong, ...updatedSongs];
         await db
