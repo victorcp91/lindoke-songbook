@@ -1,7 +1,7 @@
 import NodeCache from 'node-cache';
 
 // stdTTL: time to live in seconds for every generated cache element.
-const cache = new NodeCache({ stdTTL: 7200 });
+const cache = new NodeCache({ stdTTL: 3600 });
 function getUrlFromRequest(req) {
   const url = `${req.protocol}://${req.headers.host}${req.originalUrl}`;
   return url;
