@@ -10,4 +10,6 @@ routes.put('/lyrics/:id', SongbookController.update);
 
 routes.put('/songs/:id', SongbookController.store);
 
+routes.delete('/songs/:id', SongbookController.delete);
+
 export default routes;

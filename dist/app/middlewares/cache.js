@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _nodecache = require('node-cache'); var _nodecache2 = _interopRequireDefault(_nodecache);
 
 // stdTTL: time to live in seconds for every generated cache element.
-const cache = new (0, _nodecache2.default)({ stdTTL: 7200 });
+const cache = new (0, _nodecache2.default)({ stdTTL: 3600 });
 function getUrlFromRequest(req) {
   const url = `${req.protocol}://${req.headers.host}${req.originalUrl}`;
   return url;

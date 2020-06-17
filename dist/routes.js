@@ -10,4 +10,6 @@ routes.put('/lyrics/:id', _SongbookController2.default.update);
 
 routes.put('/songs/:id', _SongbookController2.default.store);
 
+routes.delete('/songs/:id', _SongbookController2.default.delete);
+
 exports. default = routes;

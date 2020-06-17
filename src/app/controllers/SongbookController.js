@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.firebase_apiKey,
@@ -15,6 +16,20 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
+
+firebase
+  .auth()
+  .signInWithEmailAndPassword(
+    process.env.firebase_admin_email,
+    process.env.firebase_admin_password
+  )
+  .catch(error => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error(errorCode, errorMessage);
+    // ...
+  });
 
 class SongbookController {
   async show(req, res, next) {
@@ -43,15 +58,29 @@ class SongbookController {
     if (songs && songs.length) {
       const artistRef = await db.collection('artists').doc(id);
 
-      const artist = await artistRef.get();
-      if (artist.data().songs.length < songs.length) {
-        await artistRef.update({
-          songs,
-        });
-        return res.status(200).json(songs);
+      const artists = await artistRef.get();
+      if (!artists.exists) {
+        await db
+          .collection('artists')
+          .doc(id)
+          .set({
+            songs,
+          });
+        return res.status(200).json({ artist: id, songs });
       }
-
-      return res.status(200).json(songs);
+      const updatedSongs = [...artists.data().songs];
+      songs.forEach(newSong => {
+        if (!updatedSongs.find(song => song.id === newSong.id)) {
+          updatedSongs.push(newSong);
+        }
+      });
+      await db
+        .collection('artists')
+        .doc(id)
+        .set({
+          songs: updatedSongs,
+        });
+      return res.status(200).json({ artist: id, songs: updatedSongs });
     }
     return res.status(400);
   }
@@ -65,7 +94,7 @@ class SongbookController {
         .collection('artists')
         .doc(id)
         .get();
-      const { songs } = artistSongs.data();
+      const { songs } = await artistSongs.data();
       if (songs.find(song => song.title === oldSongTitle && !song.lyrics)) {
         let updatedSongs = songs.filter(song => song.title !== oldSongTitle);
         const newSong = {
@@ -81,6 +110,31 @@ class SongbookController {
             songs: updatedSongs,
           });
         return res.status(200).json(newSong);
+      }
+      return res.status(200);
+    }
+    return res.json(400);
+  }
+
+  async delete(req, res) {
+    const { id } = req.params;
+    const { videoId } = req.body;
+
+    if (videoId) {
+      const artistSongs = await db
+        .collection('artists')
+        .doc(id)
+        .get();
+      const { songs } = artistSongs.data();
+      if (songs.find(song => song.id === videoId)) {
+        const updatedSongs = songs.filter(song => song.id !== videoId);
+        await db
+          .collection('artists')
+          .doc(id)
+          .update({
+            songs: updatedSongs,
+          });
+        return res.status(200).json(updatedSongs);
       }
       return res.status(200);
     }
