@@ -118,8 +118,7 @@ class SongbookController {
 
   async delete(req, res) {
     const { id } = req.params;
-    const { videoId } = req.body;
-
+    const { videoId } = req.query;
     if (videoId) {
       const artistSongs = await db
         .collection('artists')
